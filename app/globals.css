@@ -1,23 +1,31 @@
 @import "tailwindcss";
 
 :root {
-  --cement: #1A1A18; /* Dark base */
-  --dark: #F5F5F0; /* Light text */
-  --warm-off: #242422; /* Slightly lighter dark */
-  --wood: #C5A059; /* Gold accent */
-  --stone: #3A3A38; /* Muted dark */
-  --plant: #4A6741;
-  --heading: rgba(245, 245, 240, 0.95);
-  --body: rgba(245, 245, 240, 0.70);
+  --cement: #F2EDE1;
+  /* Light Sandle Background */
+  --dark: #000000;
+  /* Deepest Black for High Contrast */
+  --amber: #D97706;
+  /* Core Amber Accent */
+  --cream: #FDFCF0;
+  /* High-Key Cream Accent */
+  --warm-off: #F2EFE9;
+  /* Muted Light Mode */
+  --wood: #C5A059;
+  /* Rich Gold Amber */
+  --stone: #E8E4DA;
+  /* Muted Cream Stone */
+  --light-glass: rgba(255, 255, 255, 0.45);
 }
 
 @theme inline {
-  --color-cement: #1A1A18;
-  --color-dark: #F5F5F0;
-  --color-warm: #242422;
+  --color-cement: #F2EDE1;
+  --color-dark: #1A1A18;
+  --color-amber: #D97706;
+  --color-cream: #FDFCF0;
+  --color-warm: #F2EFE9;
   --color-wood: #C5A059;
-  --color-stone: #3A3A38;
-  --color-plant: #4A6741;
+  --color-stone: #E8E4DA;
   --font-bebas: 'Cormorant Garamond', serif;
   --font-dm: 'DM Sans', sans-serif;
   --font-mono: 'DM Mono', monospace;
@@ -27,7 +35,8 @@ html {
   scroll-behavior: smooth;
 }
 
-html, body {
+html,
+body {
   background-color: var(--cement);
   margin: 0;
   padding: 0;
@@ -38,44 +47,37 @@ body {
   font-family: 'DM Sans', sans-serif;
   color: var(--dark);
   min-height: 100vh;
-  cursor: none;
-}
-
-@media (max-width: 1023px) {
-  body {
-    cursor: auto;
-  }
-}
-
-a, button, [role="button"], .cursor-pointer {
-  cursor: none !important;
-}
-
-@media (max-width: 1023px) {
-  a, button, [role="button"], .cursor-pointer {
-    cursor: auto !important;
-  }
 }
 
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
 }
+
 ::-webkit-scrollbar-track {
-  background: #C8C4BC;
+  background: #E8E4DA;
 }
+
 ::-webkit-scrollbar-thumb {
-  background: rgba(26, 26, 24, 0.25);
+  background: rgba(26, 26, 24, 0.15);
   border-radius: 3px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(26, 26, 24, 0.4);
+  background: rgba(26, 26, 24, 0.3);
 }
 
 /* Loading animation */
 @keyframes pulse-subtle {
-  0%, 100% { opacity: 0.5; }
-  50% { opacity: 1; }
+
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+
+  50% {
+    opacity: 1;
+  }
 }
 
 .animate-pulse-subtle {
@@ -84,18 +86,33 @@ a, button, [role="button"], .cursor-pointer {
 
 /* Cart drawer animation */
 @keyframes slide-in-right {
-  from { transform: translateX(100%); }
-  to { transform: translateX(0); }
+  from {
+    transform: translateX(100%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
 }
 
 @keyframes slide-out-right {
-  from { transform: translateX(0); }
-  to { transform: translateX(100%); }
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(100%);
+  }
 }
 
 @keyframes fade-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 .slide-in-right {
@@ -112,28 +129,34 @@ a, button, [role="button"], .cursor-pointer {
 
 /* Product card tilt shine effect */
 .card-shine {
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 0.05) 40%,
-    rgba(255, 255, 255, 0.15) 50%,
-    rgba(255, 255, 255, 0.05) 60%,
-    rgba(255, 255, 255, 0) 100%
-  );
+  background: linear-gradient(135deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.05) 40%,
+      rgba(255, 255, 255, 0.15) 50%,
+      rgba(255, 255, 255, 0.05) 60%,
+      rgba(255, 255, 255, 0) 100%);
 }
 
 .ios-liquid-btn {
   position: relative;
   overflow: hidden;
   isolation: isolate;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: linear-gradient(138deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05) 46%, rgba(255, 255, 255, 0.02));
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: linear-gradient(138deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.6) 46%, rgba(255, 255, 255, 0.4));
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(20px) saturate(1.8);
   -webkit-backdrop-filter: blur(20px) saturate(1.8);
-  color: #F5F5F0;
-  transition: all 300ms cubic-bezier(0.23, 1, 0.32, 1);
-  border-radius: 9999px; /* Rounded corners as requested */
+  color: #1A1A18;
+  transition: all 400ms cubic-bezier(0.22, 1, 0.36, 1);
+  border-radius: 9999px;
+}
+
+.liquid-glass-ios {
+  background: linear-gradient(138deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.2) 40%, rgba(255, 255, 255, 0.1));
+  backdrop-filter: blur(25px) saturate(1.8);
+  -webkit-backdrop-filter: blur(25px) saturate(1.8);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  box-shadow: 0 4px 40px rgba(0, 0, 0, 0.04), inset 0 1px 1px rgba(255, 255, 255, 0.5);
 }
 
 .ios-liquid-btn::before {
@@ -142,7 +165,7 @@ a, button, [role="button"], .cursor-pointer {
   inset: 0;
   pointer-events: none;
   border-radius: inherit;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.62), rgba(255, 255, 255, 0.08) 42%, rgba(255, 255, 255, 0));
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0));
 }
 
 .ios-liquid-btn::after {
@@ -151,24 +174,28 @@ a, button, [role="button"], .cursor-pointer {
   inset: 0;
   pointer-events: none;
   border-radius: inherit;
-  background: radial-gradient(120% 90% at 8% 0%, rgba(255, 255, 255, 0.42), rgba(255, 255, 255, 0) 52%);
+  background: radial-gradient(120% 90% at 8% 0%, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0) 52%);
 }
 
 .ios-liquid-btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px) scale(1.02);
+  background: linear-gradient(138deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.7) 46%, rgba(255, 255, 255, 0.5));
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.9);
 }
 
 .ios-liquid-btn:active {
-  transform: translateY(0.5px) scale(0.97);
+  transform: translateY(0.5px) scale(0.96);
+  opacity: 0.8;
 }
+
 .mesh-blur {
   pointer-events: none;
   width: 100%;
   height: 200px;
-  background: radial-gradient(at 50% 0%, rgba(200, 180, 150, 0.15) 0%, transparent 70%),
-              radial-gradient(at 0% 50%, rgba(26, 26, 24, 0.4) 0%, transparent 50%),
-              radial-gradient(at 100% 50%, rgba(197, 160, 89, 0.08) 0%, transparent 50%);
+  background: radial-gradient(at 50% 0%, rgba(217, 119, 6, 0.08) 0%, transparent 70%),
+    radial-gradient(at 0% 50%, rgba(249, 247, 242, 0.8) 0%, transparent 50%),
+    radial-gradient(at 100% 50%, rgba(217, 119, 6, 0.05) 0%, transparent 50%);
   filter: blur(80px);
   z-index: 5;
 }
@@ -176,16 +203,14 @@ a, button, [role="button"], .cursor-pointer {
 .section-divider {
   height: 1px;
   width: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent);
+  background: linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.04), transparent);
 }
 
-.top-vignette {
-  position: fixed;
-  left: 0;
-  right: 0;
-  top: 0;
-  height: 180px;
-  background: linear-gradient(180deg, rgba(26, 26, 24, 0.85) 0%, rgba(26, 26, 24, 0.4) 40%, transparent 100%);
-  pointer-events: none;
-  z-index: 40;
+@keyframes marquee-infinite {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  animation: marquee-infinite 30s linear infinite;
 }

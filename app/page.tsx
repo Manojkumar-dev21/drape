@@ -9,9 +9,6 @@ import CartDrawer from '@/components/cart/CartDrawer'
 export default function Home() {
   return (
     <main className="relative">
-      {/* Dynamic Top Vignette for Depth */}
-      <div className="top-vignette" />
-
       <Navbar />
 
       {/* Core scrollytelling experience */}

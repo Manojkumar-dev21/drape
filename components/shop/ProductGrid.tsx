@@ -15,23 +15,25 @@ export default function ProductGrid() {
   useEffect(() => {
     const ctx = gsap.context(() => {
       // Header animation
-      gsap.fromTo(headerRef.current?.children || [], 
-        { opacity: 0, y: 30 },
-        { 
-          opacity: 1, 
-          y: 0, 
-          duration: 1, 
-          stagger: 0.15, 
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: headerRef.current,
-            start: 'top 85%',
+      if (headerRef.current && headerRef.current.children.length > 0) {
+        gsap.fromTo(headerRef.current.children, 
+          { opacity: 0, y: 30 },
+          { 
+            opacity: 1, 
+            y: 0, 
+            duration: 1, 
+            stagger: 0.15, 
+            ease: 'power3.out',
+            scrollTrigger: {
+              trigger: headerRef.current,
+              start: 'top 85%',
+            }
           }
-        }
-      )
+        )
+      }
 
       // Grid items staggered entrance
-      if (gridRef.current) {
+      if (gridRef.current && gridRef.current.children.length > 0) {
         gsap.fromTo(gridRef.current.children,
           { opacity: 0, y: 50 },
           {
@@ -60,18 +62,18 @@ export default function ProductGrid() {
     >
       <div
         className="absolute inset-x-0 top-0 h-32"
-        style={{ background: 'linear-gradient(to bottom, rgba(0,0,0,0.2), transparent)' }}
+        style={{ background: 'linear-gradient(to bottom, rgba(0,0,0,0.03), transparent)' }}
       />
 
       <div className="max-w-7xl mx-auto relative">
         <div className="flex flex-col items-center mb-16 sm:mb-20" ref={headerRef}>
-          <span className="inline-block text-[11px] tracking-[0.4em] uppercase mb-4 px-4 py-1.5 rounded-full border border-white/10 text-white/50 font-mono">
+          <span className="inline-block text-[11px] tracking-[0.4em] uppercase mb-4 px-4 py-1.5 rounded-full border border-black/5 text-black/50 font-mono">
             The Collection
           </span>
-          <h2 className="text-5xl sm:text-7xl lg:text-8xl tracking-tight text-center text-white drop-shadow-sm font-bebas">
+          <h2 className="text-5xl sm:text-7xl lg:text-8xl tracking-tight text-center text-[#1A1A18] font-bebas">
             Shop DRAPE
           </h2>
-          <div className="w-16 h-[1px] mt-8 bg-white/20" />
+          <div className="w-16 h-[1px] mt-8 bg-black/10" />
         </div>
 
         <div 
@@ -86,7 +88,7 @@ export default function ProductGrid() {
 
       <div
         className="absolute inset-x-0 bottom-0 h-24"
-        style={{ background: 'linear-gradient(to bottom, transparent, rgba(0,0,0,0.1))' }}
+        style={{ background: 'linear-gradient(to bottom, transparent, rgba(0,0,0,0.02))' }}
       />
     </section>
   )

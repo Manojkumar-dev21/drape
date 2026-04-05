@@ -3,11 +3,15 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/dist/ScrollTrigger'
+import { AnimatePresence, motion } from 'framer-motion'
 import StoryOverlays from './StoryOverlays'
+import LoadingScreen from '@/components/ui/LoadingScreen'
+import { useUIStore } from '@/store/uiStore'
 
 gsap.registerPlugin(ScrollTrigger)
 
 const TOTAL_FRAMES = 192
+const INITIAL_THRESHOLD = 48 // Progress enough for initial interaction (25%)
 
 function getFramePath(i: number) {
   return `/frames/${String(i + 1).padStart(5, '0')}.png`
@@ -17,32 +21,47 @@ export default function BoutiqueScroll() {
   const containerRef = useRef<HTMLDivElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const imagesRef = useRef<HTMLImageElement[]>([])
-  const [loaded, setLoaded] = useState(false)
+  const [isAssetsLoaded, setIsAssetsLoaded] = useState(false)
+  const [isAnimationFinished, setIsAnimationFinished] = useState(false)
   const [loadProgress, setLoadProgress] = useState(0)
   const [scrollProgress, setScrollProgress] = useState(0)
 
-  // Preload frames
+  // Advanced preloading with background continuation
+  const loadingStarted = useRef(false)
   useEffect(() => {
-    let count = 0
-    const images: HTMLImageElement[] = []
+    if (loadingStarted.current) return
+    loadingStarted.current = true
 
-    for (let i = 0; i < TOTAL_FRAMES; i++) {
-      const img = new Image()
-      img.src = getFramePath(i)
-      img.onload = () => {
-        count++
-        setLoadProgress(Math.round((count / TOTAL_FRAMES) * 100))
-        if (count === TOTAL_FRAMES) setLoaded(true)
+    let loadedCount = 0
+    const images: HTMLImageElement[] = []
+    
+    // Prioritize first batch for fast entry
+    const loadBatch = (start: number, end: number) => {
+      for (let i = start; i < end; i++) {
+        const img = new Image()
+        img.src = getFramePath(i)
+        img.onload = () => {
+          loadedCount++
+          const realProgress = Math.round((loadedCount / TOTAL_FRAMES) * 100)
+          
+          // Adaptive loading: Finish transition when initial batch is ready
+          if (loadedCount >= INITIAL_THRESHOLD && !isAssetsLoaded) {
+             setIsAssetsLoaded(true)
+          }
+          
+          setLoadProgress(realProgress)
+        }
+        img.onerror = () => {
+          loadedCount++
+        }
+        images[i] = img
       }
-      img.onerror = () => {
-        count++
-        if (count === TOTAL_FRAMES) setLoaded(true)
-      }
-      images[i] = img
     }
 
+    // Load everything in one pass but track the threshold
+    loadBatch(0, TOTAL_FRAMES)
     imagesRef.current = images
-  }, [])
+  }, [isAssetsLoaded])
 
   const drawFrame = useCallback((idx: number) => {
     const canvas = canvasRef.current
@@ -72,69 +91,106 @@ export default function BoutiqueScroll() {
     ctx.drawImage(img, x, y, img.naturalWidth * coverScale, img.naturalHeight * coverScale)
   }, [])
 
+  // Update drawFrame(0) as soon as assets are ready to prevent flash
   useEffect(() => {
-    if (!loaded || !containerRef.current || !canvasRef.current) return
+    if (isAssetsLoaded && imagesRef.current.length > 0) {
+      drawFrame(0)
+    }
+  }, [isAssetsLoaded, drawFrame])
+
+  useEffect(() => {
+    if (!containerRef.current || !canvasRef.current || !imagesRef.current.length) return
 
     const obj = { frame: 0 }
     
-    // Initial draw
+    // Initial draw (redundant but safe)
     drawFrame(0)
 
-    const st = ScrollTrigger.create({
-      trigger: containerRef.current,
-      start: 'top top',
-      end: 'bottom bottom',
-      scrub: true,
-      onUpdate: (self) => {
-        setScrollProgress(self.progress)
-        const frame = Math.round(self.progress * (TOTAL_FRAMES - 1))
-        if (frame !== obj.frame) {
-          obj.frame = frame
-          requestAnimationFrame(() => drawFrame(frame))
+    let st: ScrollTrigger | null = null
+
+    const createST = () => {
+      if (!containerRef.current) return
+      st = ScrollTrigger.create({
+        trigger: containerRef.current,
+        start: 'top top',
+        end: 'bottom bottom',
+        scrub: 0.5, // Smoother scrub for better perception
+        onUpdate: (self) => {
+          setScrollProgress(self.progress)
+          const frame = Math.round(self.progress * (TOTAL_FRAMES - 1))
+          if (frame !== obj.frame) {
+            obj.frame = frame
+            requestAnimationFrame(() => drawFrame(frame))
+          }
         }
+      })
+    }
+
+    createST()
+
+    return () => {
+      if (st) st.kill()
+    }
+  }, [isAnimationFinished, drawFrame])
+
+
+  const setLoaded = useUIStore((s) => s.setLoaded)
+  const isLoaded = useUIStore((s) => s.isLoaded)
+
+  const handleLoadingComplete = () => {
+    setIsAnimationFinished(true)
+    setLoaded(true)
+  }
+
+  // Force finish if things take too long (UX failsafe)
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (!isAssetsLoaded && loadProgress > 10) {
+        setIsAssetsLoaded(true)
       }
-    })
-
-    return () => st.kill()
-  }, [loaded, drawFrame])
-
+    }, 6000) // 6s failsafe
+    return () => clearTimeout(timer)
+  }, [isAssetsLoaded, loadProgress])
 
   return (
     <>
-      {/* Loading Screen */}
-      {!loaded && (
-        <div className="fixed inset-0 flex flex-col items-center justify-center z-50 text-center"
-          style={{ background: 'var(--cement)' }}>
-          <div className="w-8 h-8 rounded-full border border-white/10 border-t-white/80 animate-spin mb-6 mx-auto" />
-          <p className="tracking-[0.2em] uppercase"
-            style={{ fontFamily: "var(--font-mono)", color: 'var(--dark)', opacity: 0.5, fontSize: '11px' }}>
-            Loading DRAPE… {loadProgress}%
-          </p>
-        </div>
-      )}
+      <AnimatePresence>
+        {(!isAnimationFinished || !isAssetsLoaded) && (
+          <LoadingScreen
+            progress={isAssetsLoaded ? 100 : loadProgress}
+            onComplete={handleLoadingComplete}
+          />
+        )}
+      </AnimatePresence>
 
-      {/* 400vh Scroll Container */}
-      <div className="relative" ref={containerRef} style={{ height: '400vh' }}>
-
-        {/* Sticky Canvas Wrapper */}
-        <div className="sticky top-0 h-screen w-full overflow-hidden">
+      <div
+        className="relative"
+        ref={containerRef}
+        style={{
+          height: '400vh',
+        }}
+      >
+        <motion.div 
+          className="sticky top-0 h-screen w-full overflow-hidden bg-[#F9F7F2]"
+          initial={{ scale: 1.05, opacity: 0 }}
+          animate={{ 
+            scale: isAnimationFinished ? 1 : 1.05, 
+            opacity: isAssetsLoaded ? 1 : 0 
+          }}
+          transition={{ 
+            scale: { duration: 1.2, ease: [0.22, 1, 0.36, 1] },
+            opacity: { duration: 0.8, ease: "easeInOut" }
+          }}
+        >
           <canvas
             ref={canvasRef}
             className="w-full h-full block"
             style={{ background: 'var(--cement)' }}
           />
 
-          {/* Vignette Overlay (Requested previously: blends edges with cement bg) */}
-          <div
-            className="absolute inset-0 pointer-events-none"
-            style={{
-              background: 'radial-gradient(circle, transparent 40%, rgba(26, 26, 24, 0.4) 75%, var(--cement) 100%)',
-            }}
-          />
-
           {/* Story Text Overlays */}
           <StoryOverlays scrollProgress={scrollProgress} />
-        </div>
+        </motion.div>
       </div>
     </>
   )

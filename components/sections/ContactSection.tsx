@@ -11,35 +11,62 @@ export default function ContactSection() {
   const [submitted, setSubmitted] = useState(false)
   const sectionRef = useRef<HTMLDivElement>(null)
   const formRef = useRef<HTMLFormElement>(null)
+  const headingRef = useRef<HTMLHeadingElement>(null)
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Heading entrance
-      gsap.from('.contact-reveal', {
-        opacity: 0,
-        y: 30,
-        stagger: 0.1,
-        duration: 1,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top 80%',
-        }
-      })
+      // Split text reveal for heading
+      const h2 = headingRef.current
+      if (h2) {
+        const words = h2.innerText.split(' ')
+        h2.innerHTML = words.map(w => `<span class="inline-block overflow-hidden"><span class="inline-block translate-y-full">${w}</span></span>`).join(' ')
 
-      // Form inputs staggered entrance
-      if (formRef.current) {
-        gsap.from(formRef.current.children, {
-          opacity: 0,
-          y: 20,
-          stagger: 0.08,
-          duration: 0.8,
-          ease: 'power2.out',
+        gsap.to(h2.querySelectorAll('span span'), {
+          y: 0,
+          stagger: 0.03,
+          duration: 1.8,
+          ease: 'power4.out',
           scrollTrigger: {
-            trigger: formRef.current,
-            start: 'top 85%',
+            trigger: h2,
+            start: 'top 90%',
           }
         })
+      }
+
+      // Staggered reveals for info and form
+      const reveals = gsap.utils.toArray('.contact-reveal')
+      gsap.fromTo(reveals,
+        { opacity: 0, y: 40, filter: 'blur(10px)' },
+        {
+          opacity: 1,
+          y: 0,
+          filter: 'blur(0px)',
+          stagger: 0.1,
+          duration: 1.5,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top 75%',
+          }
+        }
+      )
+
+      if (formRef.current) {
+        gsap.fromTo(formRef.current.children,
+          { opacity: 0, scale: 0.98, y: 20 },
+          {
+            opacity: 1,
+            scale: 1,
+            y: 0,
+            stagger: 0.1,
+            duration: 1.2,
+            ease: 'expo.out',
+            scrollTrigger: {
+              trigger: formRef.current,
+              start: 'top 85%',
+            }
+          }
+        )
       }
     }, sectionRef)
 
@@ -54,9 +81,9 @@ export default function ContactSection() {
   }
 
   const inputStyle: React.CSSProperties = {
-    background: 'rgba(255,255,255,0.03)',
-    border: '1px solid rgba(255,255,255,0.08)',
-    color: 'var(--dark)',
+    background: 'rgba(255, 255, 255, 0.4)',
+    border: '1px solid rgba(0, 0, 0, 0.08)',
+    color: 'black',
     fontFamily: "var(--font-dm)",
     fontSize: '14px',
     outline: 'none',
@@ -66,126 +93,156 @@ export default function ContactSection() {
     <section
       id="contact"
       ref={sectionRef}
-      className="relative w-full py-24 sm:py-32 px-5 sm:px-8 lg:px-12 overflow-hidden"
+      className="relative w-full py-32 sm:py-48 px-6 sm:px-12 lg:px-24 overflow-hidden"
       style={{ background: 'var(--cement)' }}
     >
-      {/* Background Glow */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-[500px] bg-wood/5 blur-[120px] rounded-full pointer-events-none" />
+      <div className="max-w-7xl mx-auto relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 lg:gap-32">
 
-      <div className="max-w-6xl mx-auto relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">
-          {/* Left — Info */}
-          <div>
-            <span
-              className="contact-reveal inline-block text-[11px] tracking-[0.3em] uppercase mb-5 px-5 py-2 rounded-full font-bold font-mono"
-              style={{
-                color: 'var(--wood)',
-                border: '1px solid rgba(197,160,89,0.25)',
-                background: 'rgba(197,160,89,0.08)',
-              }}
-            >
-              Get in Touch
-            </span>
+          {/* Left — Editorial Info */}
+          <div className="space-y-16">
+            <div>
+              <p className="contact-reveal text-[10px] uppercase tracking-[0.5em] text-[#D97706] mb-8 font-mono font-bold">
+                Get in Touch
+              </p>
+              <h2
+                ref={headingRef}
+                className="text-4xl sm:text-7xl lg:text-8xl text-black font-light leading-[1.05] tracking-tight mb-12"
+                style={{ fontFamily: "'Cormorant Garamond', serif" }}
+              >
+                Let's start a <br />
+                <span className="italic pl-12 sm:pl-20 text-[#D97706]">conversation.</span>
+              </h2>
+              <p className="contact-reveal text-lg text-black/80 leading-relaxed font-light max-w-md">
+                Questions about our collections, bespoke inquiries, or a simple greeting — our doors are always open to the discerning.
+              </p>
+            </div>
 
-            <h2 className="contact-reveal text-4xl sm:text-5xl lg:text-[4rem] leading-[1.05] mb-8 text-white font-bebas uppercase tracking-tight">
-              Let's start a <span className="text-wood">conversation.</span>
-            </h2>
-
-            <p className="contact-reveal text-sm sm:text-base leading-relaxed mb-12 max-w-sm text-white/50 font-light">
-              Questions about our collections, wholesale inquiries, or just want to say hello? We'd love to hear from you.
-            </p>
-
-            <div className="contact-reveal space-y-8">
+            {/* Info Triptych (Styled like About) */}
+            <div className="grid gap-12 pt-16 border-t border-black/10">
               {[
-                { label: 'Email', value: 'hello@drape.in', href: 'mailto:hello@drape.in' },
-                { label: 'Phone', value: '+91 98765 43210', href: 'tel:+919876543210' },
-                { label: 'Studio', value: 'Coimbatore, Tamil Nadu', href: '#' },
+                {
+                  id: 'E',
+                  label: 'Email',
+                  value: 'hello@drape.in',
+                  href: 'mailto:hello@drape.in',
+                  icon: (
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                      <rect width="20" height="16" x="2" y="4" rx="2" /><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+                    </svg>
+                  )
+                },
+                {
+                  id: 'P',
+                  label: 'Phone',
+                  value: '+91 98765 43210',
+                  href: 'tel:+919876543210',
+                  icon: (
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                    </svg>
+                  )
+                },
+                {
+                  id: 'S',
+                  label: 'Studio',
+                  value: 'Coimbatore, TN',
+                  href: '#',
+                  icon: (
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                      <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" /><circle cx="12" cy="10" r="3" />
+                    </svg>
+                  )
+                },
               ].map((item) => (
-                <div key={item.label} className="flex items-start gap-4 border-l border-white/5 pl-5">
-                  <span
-                    className="text-[9px] tracking-[0.2em] uppercase mt-1 w-12 shrink-0 font-mono text-white/30"
-                  >
-                    {item.label}
-                  </span>
-                  <a
-                    href={item.href}
-                    className="text-base text-white transition-opacity hover:opacity-100 opacity-70"
-                  >
-                    {item.value}
-                  </a>
+                <div key={item.label} className="contact-reveal flex items-start gap-12 group">
+                  <div className="w-10 h-10 rounded-full border border-black/10 flex items-center justify-center text-[#D97706] bg-white/50 group-hover:bg-[#D97706] group-hover:text-white transition-all duration-500">
+                    {item.icon}
+                  </div>
+                  <div>
+                    <span className="block text-[9px] tracking-[0.4em] uppercase mb-2 font-mono font-bold text-black/30">
+                      {item.label}
+                    </span>
+                    <a
+                      href={item.href}
+                      className="text-xl sm:text-2xl text-black font-medium transition-all hover:text-[#D97706] hover:translate-x-2 inline-block"
+                    >
+                      {item.value}
+                    </a>
+                  </div>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Right — Form */}
+          {/* Right — Refined Form */}
           <div className="relative">
-            <form onSubmit={handleSubmit} ref={formRef} className="space-y-5">
-              <div>
-                <label
-                  className="block text-[10px] tracking-[0.3em] uppercase mb-3 ml-1 font-mono text-wood/60"
-                >
-                  Name
-                </label>
-                <input
-                  type="text"
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full px-5 py-4 rounded-2xl transition-all focus:ring-1 focus:ring-wood/30"
-                  style={inputStyle}
-                  placeholder="Your name"
-                  required
-                />
-              </div>
+            <div className="bg-white/40 backdrop-blur-3xl p-8 sm:p-16 rounded-[2.5rem] sm:rounded-[4rem] border border-black/5 shadow-[0_40px_100px_rgba(0,0,0,0.03)] group transition-all duration-1000 hover:bg-white/60">
+              <form onSubmit={handleSubmit} ref={formRef} className="space-y-8">
+                <div className="space-y-3">
+                  <label className="block text-[10px] tracking-[0.3em] uppercase ml-1 font-bold font-mono text-black/40">
+                    Your Name
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    className="w-full px-8 py-5 rounded-[2rem] transition-all focus:ring-1 focus:ring-[#D97706]/30 hover:border-black/20"
+                    style={inputStyle}
+                    placeholder="Enter name"
+                    required
+                  />
+                </div>
 
-              <div>
-                <label
-                  className="block text-[10px] tracking-[0.3em] uppercase mb-3 ml-1 font-mono text-wood/60"
-                >
-                  Email
-                </label>
-                <input
-                  type="email"
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="w-full px-5 py-4 rounded-2xl transition-all focus:ring-1 focus:ring-wood/30"
-                  style={inputStyle}
-                  placeholder="your@email.com"
-                  required
-                />
-              </div>
+                <div className="space-y-3">
+                  <label className="block text-[10px] tracking-[0.3em] uppercase ml-1 font-bold font-mono text-black/40">
+                    Email Address
+                  </label>
+                  <input
+                    type="email"
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    className="w-full px-8 py-5 rounded-[2rem] transition-all focus:ring-1 focus:ring-[#D97706]/30 hover:border-black/20"
+                    style={inputStyle}
+                    placeholder="your@email.com"
+                    required
+                  />
+                </div>
 
-              <div>
-                <label
-                  className="block text-[10px] tracking-[0.3em] uppercase mb-3 ml-1 font-mono text-wood/60"
-                >
-                  Message
-                </label>
-                <textarea
-                  value={formData.message}
-                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                  className="w-full px-5 py-4 rounded-2xl transition-all focus:ring-1 focus:ring-wood/30 resize-none"
-                  style={{ ...inputStyle, minHeight: '160px' }}
-                  placeholder="Tell us what's on your mind..."
-                  required
-                />
-              </div>
+                <div className="space-y-3">
+                  <label className="block text-[10px] tracking-[0.3em] uppercase ml-1 font-bold font-mono text-black/40">
+                    Message
+                  </label>
+                  <textarea
+                    value={formData.message}
+                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                    className="w-full px-8 py-5 rounded-[2rem] transition-all focus:ring-1 focus:ring-[#D97706]/30 hover:border-black/20 resize-none"
+                    style={{ ...inputStyle, minHeight: '180px' }}
+                    placeholder="Tell us what's on your mind..."
+                    required
+                  />
+                </div>
 
-              <button
-                type="submit"
-                className="ios-liquid-btn w-full py-5 rounded-full text-[13px] tracking-[0.25em] font-bold uppercase transition-all hover:scale-[1.01] active:scale-[0.98]"
-                style={{
-                  fontFamily: "var(--font-mono)",
-                }}
-              >
-                {submitted ? '✓ Message Sent' : 'Send Message'}
-              </button>
-            </form>
+                <button
+                  type="submit"
+                  className="ios-liquid-btn w-full py-6 rounded-full text-[12px] tracking-[0.3em] font-bold uppercase transition-all hover:scale-[1.01] active:scale-[0.98] mt-4"
+                  style={{
+                    fontFamily: "var(--font-mono)",
+                    background: '#D97706',
+                    color: 'white',
+                    boxShadow: '0 20px 40px rgba(217,119,6,0.15)'
+                  }}
+                >
+                  {submitted ? '✓ Message Received' : 'Dispatch Message'}
+                </button>
+              </form>
+            </div>
+
+            {/* Decorative Element */}
+            <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-[#D97706]/10 blur-[80px] rounded-full pointer-events-none" />
           </div>
         </div>
       </div>
     </section>
   )
 }
-
-

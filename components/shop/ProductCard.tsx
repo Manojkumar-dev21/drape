@@ -75,8 +75,8 @@ export default function ProductCard({ product, index }: ProductCardProps) {
             className="absolute top-3 left-3 px-2.5 py-1 rounded-full text-[10px] tracking-widest uppercase"
             style={{
               fontFamily: "'DM Mono', monospace",
-              background: '#1A1A18',
-              color: '#F0ECE4',
+              background: '#D97706',
+              color: '#FDFCF0',
             }}
           >
             Sale
@@ -93,7 +93,7 @@ export default function ProductCard({ product, index }: ProductCardProps) {
           {product.colors.map((c) => (
             <span
               key={c.name}
-              className="w-3.5 h-3.5 rounded-full border border-white/10 shadow-sm"
+              className="w-3.5 h-3.5 rounded-full border border-black/5 shadow-sm"
               style={{ background: c.hex }}
               title={c.name}
             />
@@ -101,7 +101,7 @@ export default function ProductCard({ product, index }: ProductCardProps) {
         </div>
         <BlurText
           text={product.name}
-          className="text-base font-medium mb-1.5 tracking-tight text-white"
+          className="text-base font-medium mb-1.5 tracking-tight text-[#1A1A18]"
           delay={50}
           animateBy="words"
           direction="bottom"
@@ -109,13 +109,13 @@ export default function ProductCard({ product, index }: ProductCardProps) {
         <div className="flex items-center gap-2.5 mb-6">
           <span
             className="text-sm font-semibold tracking-wide"
-            style={{ color: 'var(--wood)' }}
+            style={{ color: '#D97706' }}
           >
             ₹{product.price.toLocaleString()}
           </span>
           {product.comparePrice && (
             <span
-              className="text-xs line-through opacity-40 font-normal text-white"
+              className="text-xs line-through opacity-40 font-normal text-[#1A1A18]"
             >
               ₹{product.comparePrice.toLocaleString()}
             </span>
@@ -128,10 +128,13 @@ export default function ProductCard({ product, index }: ProductCardProps) {
             e.stopPropagation()
             handleAddToCart()
           }}
-          className="ios-liquid-btn w-full py-3.5 text-[10px] tracking-[0.2em] font-bold uppercase transition-all duration-300"
+          className="ios-liquid-btn w-full py-4 text-[10px] tracking-[0.25em] font-bold uppercase transition-all duration-300"
           style={{
             fontFamily: "var(--font-mono)",
-            boxShadow: 'none', // Removing shadow as potentially requested for buttons or just cart? User said 'cart button remove shadow' but usually implies a cleaner look.
+            background: '#D97706',
+            color: '#FDFCF0',
+            border: 'none',
+            boxShadow: '0 15px 30px rgba(217,119,6,0.15)',
           }}
         >
           Quick Add

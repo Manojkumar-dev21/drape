@@ -20,7 +20,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="h-full antialiased" style={{ scrollBehavior: 'smooth' }}>
+    <html lang="en" className="h-full antialiased" style={{ scrollBehavior: 'smooth' }} data-scroll-behavior="smooth">
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
@@ -28,7 +28,6 @@ export default function RootLayout({
       </head>
       <body style={{ backgroundColor: '#1A1A18' }} suppressHydrationWarning>
         <SmoothScroll>
-          <CustomCursor />
           {children}
         </SmoothScroll>
       </body>
