@@ -11,7 +11,7 @@ import { useUIStore } from '@/store/uiStore'
 gsap.registerPlugin(ScrollTrigger)
 
 const TOTAL_FRAMES = 192
-const INITIAL_THRESHOLD = 48 // Progress enough for initial interaction (25%)
+const INITIAL_THRESHOLD = 12 // Progress enough for initial interaction (approx 6%)
 
 function getFramePath(i: number) {
   return `/frames/${String(i + 1).padStart(5, '0')}.png`
@@ -187,6 +187,19 @@ export default function BoutiqueScroll() {
             className="w-full h-full block"
             style={{ background: 'var(--cement)' }}
           />
+
+          {/* Cinematic Dark Vignette */}
+          <div 
+            className="absolute inset-0 pointer-events-none z-10"
+            style={{
+              background: 'radial-gradient(circle at center, transparent 20%, rgba(0,0,0,0.3) 100%)',
+              mixBlendMode: 'multiply'
+            }}
+          />
+
+          {/* XyberFlow Sync — Focal Glows */}
+          <div className="absolute top-[20%] left-[10%] xyber-glow animate-pulse-subtle opacity-40 scale-150" />
+          <div className="absolute bottom-[20%] right-[5%] xyber-glow animate-pulse-subtle opacity-30 scale-125" />
 
           {/* Story Text Overlays */}
           <StoryOverlays scrollProgress={scrollProgress} />

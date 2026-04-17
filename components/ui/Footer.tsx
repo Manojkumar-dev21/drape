@@ -2,6 +2,7 @@
 
 import { useRef, useEffect } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/dist/ScrollTrigger'
 
@@ -33,18 +34,18 @@ export default function Footer() {
 
   return (
     <footer
-      className="w-full py-12 sm:py-20 px-6 sm:px-12 lg:px-24"
+      className="w-full py-12 sm:py-20 px-6 sm:px-12 lg:px-24 overflow-hidden"
       style={{
         background: 'var(--cement)',
       }}
     >
-      <div className="max-w-[1800px] mx-auto overflow-hidden">
+      <div className="max-w-[1800px] mx-auto">
         {/* Massive Cinematic Logo with Fade & Loop */}
         <div className="w-full mb-16 sm:mb-24 relative">
           <h2
             ref={drapeFooterRef}
-            className="text-[12vw] sm:text-[14vw] font-bold text-black leading-[0.8] tracking-[0.5em] select-none text-center transform scale-x-110 pl-[0.5em] opacity-0"
-            style={{ 
+            className="text-[15vw] sm:text-[14vw] font-bold text-black leading-[0.8] tracking-[0.1em] sm:tracking-[0.5em] select-none text-center transform scale-x-110 opacity-0"
+            style={{
               fontFamily: "var(--font-bebas)",
               maskImage: 'linear-gradient(to bottom, black 50%, transparent 100%)',
               WebkitMaskImage: 'linear-gradient(to bottom, black 50%, transparent 100%)'
@@ -52,22 +53,22 @@ export default function Footer() {
           >
             DRAPE
           </h2>
-          
+
           <div className="mt-12 flex overflow-hidden whitespace-nowrap opacity-20 hover:opacity-50 transition-opacity duration-700">
-             <div className="flex animate-marquee text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] sm:tracking-[0.6em] font-bold">
-               {[1,2,3,4].map(i => (
-                 <div key={i} className="flex items-center">
-                    <span className="mx-8">High Fashion</span>
-                    <span className="text-lg">✧</span>
-                    <span className="mx-8">Elite Sanctuary</span>
-                    <span className="text-lg">❈</span>
-                    <span className="mx-8">Sartorial Restraint</span>
-                    <span className="text-lg">✧</span>
-                    <span className="mx-8">Timeless Silk</span>
-                    <span className="text-lg">❈</span>
-                 </div>
-               ))}
-             </div>
+            <div className="flex animate-marquee text-[9px] sm:text-xs font-mono uppercase tracking-[0.2em] sm:tracking-[0.6em] font-bold">
+              {[1, 2, 3, 4].map(i => (
+                <div key={i} className="flex items-center">
+                  <span className="mx-4 sm:mx-8">High Fashion</span>
+                  <span className="text-lg">✧</span>
+                  <span className="mx-4 sm:mx-8">Elite Sanctuary</span>
+                  <span className="text-lg">❈</span>
+                  <span className="mx-4 sm:mx-8">Sartorial Restraint</span>
+                  <span className="text-lg">✧</span>
+                  <span className="mx-4 sm:mx-8">Timeless Silk</span>
+                  <span className="text-lg">❈</span>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
@@ -75,11 +76,11 @@ export default function Footer() {
         <div className="w-full h-[1px] bg-black/10 mb-16 sm:mb-24" />
 
         {/* Info & Links Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-24">
 
           {/* Brand Philosophy - Column 1-5 */}
-          <div className="lg:col-span-5 space-y-10">
-            <p className="text-xl sm:text-2xl lg:text-3xl font-light text-black/80 leading-relaxed max-w-xl" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
+          <div className="lg:col-span-5 space-y-8">
+            <p className="text-lg sm:text-xl lg:text-3xl font-light text-black/80 leading-relaxed max-w-xl" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
               Let's bring your silhouette into the future — whether you need breathable textures, seamless organic linens, or elite sartorial restraint, <span className="text-[#D97706] italic">we're ready.</span>
             </p>
             <div className="flex gap-4 pt-4">
@@ -175,13 +176,22 @@ export default function Footer() {
           </div>
 
           {/* Centered Minimalist Copyright - Dark Text */}
-          <div className="flex flex-col items-center gap-6">
-            <p className="text-[10px] text-black font-bold tracking-[0.4em] font-mono uppercase">
+          <div className="flex flex-col items-center gap-6 text-center">
+            <p className="text-[10px] text-black/40 font-bold tracking-[0.4em] font-mono uppercase">
               © 2026 DRAPE. ARCHITECTED FOR THE DISCERNING.
             </p>
 
-            <div className="flex items-center gap-4 opacity-60 hover:opacity-100 transition-opacity duration-500">
-              <span className="text-[8px] tracking-[0.5em] font-bold uppercase font-mono text-[#1A1A18]">DESIGNED BY XYBERFLOW</span>
+            <div className="opacity-80 hover:opacity-100 transition-opacity duration-500 flex flex-col items-center gap-3">
+              <span className="text-[10px] tracking-[0.4em] font-bold uppercase font-mono text-black/60 mb-1">Design and Developed by</span>
+              <div className="relative h-5 w-32 sm:w-40">
+                <Image 
+                  src="/copyright.png" 
+                  alt="XyberFlow" 
+                  fill
+                  sizes="(max-width: 768px) 128px, 160px"
+                  className="object-contain brightness-0" 
+                />
+              </div>
             </div>
           </div>
         </div>

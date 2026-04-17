@@ -10,14 +10,14 @@ gsap.registerPlugin(ScrollTrigger)
 export default function AboutSection() {
   const sectionRef = useRef<HTMLDivElement>(null)
   const headingRef = useRef<HTMLHeadingElement>(null)
-  const imageContainerRef = useRef<HTMLDivElement>(null)
-  
+  const stampRef = useRef<HTMLDivElement>(null)
+
   useEffect(() => {
     const ctx = gsap.context(() => {
       // Heading reveal
       const h2 = headingRef.current
       if (h2) {
-        gsap.fromTo(h2, 
+        gsap.fromTo(h2,
           { opacity: 0, y: 40, filter: 'blur(10px)' },
           {
             opacity: 1,
@@ -65,6 +65,19 @@ export default function AboutSection() {
           }
         }
       )
+      // Stamp scroll rotation
+      if (stampRef.current) {
+        gsap.to(stampRef.current, {
+          rotation: 720,
+          scale: 1.1,
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: 1.5,
+          }
+        })
+      }
     }, sectionRef)
 
     return () => ctx.revert()
@@ -83,13 +96,13 @@ export default function AboutSection() {
           <p className="text-[10px] uppercase tracking-[0.5em] text-[#D97706] mb-8 font-mono font-bold">
             Our Philosophy
           </p>
-          <h2 
+          <h2
             ref={headingRef}
-            className="text-4xl sm:text-7xl lg:text-8xl text-black font-bold leading-[1.05] tracking-tighter"
+            className="text-3xl sm:text-7xl lg:text-8xl text-black font-bold leading-[1.1] sm:leading-[1.05] tracking-tighter"
             style={{ fontFamily: "'Cormorant Garamond', serif" }}
           >
             Garments that breathe, <br />
-            <span className="italic pl-12 sm:pl-24">silhouettes that endure.</span>
+            <span className="italic pl-6 sm:pl-24">silhouettes that endure.</span>
           </h2>
         </div>
 
@@ -107,6 +120,31 @@ export default function AboutSection() {
                   className="parallax-img object-cover transition-transform duration-1000 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors duration-700" />
+
+                {/* Drape Stamp */}
+                <div
+                  ref={stampRef}
+                  className="absolute top-6 right-6 w-24 h-24 sm:w-36 sm:h-36 pointer-events-none z-20 overflow-visible"
+                >
+                  <div className="relative w-full h-full flex items-center justify-center">
+                    {/* Background circle with glass effect */}
+                    <div className="absolute inset-0 rounded-full bg-[#D97706] shadow-2xl border border-white/20 opacity-90" />
+
+                    <svg viewBox="0 0 100 100" className="w-full h-full relative z-10">
+                      <defs>
+                        <path id="circlePath" d="M 50, 50 m -37, 0 a 37,37 0 1,1 74,0 a 37,37 0 1,1 -74,0" />
+                      </defs>
+                      <text className="text-[10px] uppercase font-bold tracking-[0.2em] fill-white/90">
+                        <textPath xlinkHref="#circlePath">
+                          Premium Quality • Drape Studio • Est. 2026 •
+                        </textPath>
+                      </text>
+                    </svg>
+                    <div className="absolute inset-0 flex items-center justify-center z-10">
+                      <span className="text-xl sm:text-2xl font-bebas text-white">DRAPE</span>
+                    </div>
+                  </div>
+                </div>
               </div>
               <div className="max-w-xl">
                 <h3 className="text-2xl sm:text-3xl text-black font-bold mb-6">The quietude of essentialism.</h3>
@@ -153,19 +191,26 @@ export default function AboutSection() {
             </div>
 
             <div className="about-card aspect-square relative rounded-[2rem] overflow-hidden group border border-black/5">
-               <Image
-                  src="/about_interior.png" // Reusing asset for variety
-                  alt="Craftsmanship"
-                  fill
-                  sizes="(max-width: 768px) 100vw, 33vw"
-                  className="parallax-img object-cover grayscale transition-all duration-1000 group-hover:grayscale-0 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-[#D97706]/10 mix-blend-multiply opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-                <div className="absolute bottom-8 left-8 right-8">
-                   <p className="text-white text-[10px] uppercase tracking-[0.5em] font-mono font-bold drop-shadow-sm opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-4 group-hover:translate-y-0">
-                     Tactile Memory
-                   </p>
+              <Image
+                src="/about_interior.png" // Reusing asset for variety
+                alt="Craftsmanship"
+                fill
+                sizes="(max-width: 768px) 100vw, 33vw"
+                className="parallax-img object-cover grayscale transition-all duration-1000 group-hover:grayscale-0 group-hover:scale-110"
+              />
+              <div className="absolute inset-0 bg-[#D97706]/10 mix-blend-multiply opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+              <div className="absolute bottom-8 left-8 right-8">
+                <p className="text-white text-[10px] uppercase tracking-[0.5em] font-mono font-bold drop-shadow-sm opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-4 group-hover:translate-y-0">
+                  Tactile Memory
+                </p>
+              </div>
+
+              {/* Minimal Stamp Detail */}
+              <div className="absolute top-6 left-6 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
+                <div className="w-12 h-12 rounded-full border border-white/30 flex items-center justify-center animate-spin-slow">
+                  <span className="text-[6px] text-white/50 uppercase tracking-tighter">Certified Crafted</span>
                 </div>
+              </div>
             </div>
           </div>
         </div>

@@ -19,32 +19,32 @@ interface TextBeat {
 const beats: TextBeat[] = [
   {
     id: 'hero',
-    heading: 'THE AMBER ERA.',
-    subtext: 'A new era of sartorial sanctuary. Engineered for the modern silhouette.',
+    heading: 'SILENT MONOLITH.',
+    subtext: 'Architected for the quiet soul. A new cadence of sartorial restraint.',
     position: 'center',
     rangeStart: 0,
     rangeEnd: 0.12,
   },
   {
     id: 'minimal',
-    heading: 'SILK & CLAY.',
-    subtext: 'Raw silk and creamy ochre. Silhouettes that breathe with the light.',
+    heading: 'ORGANIC DIALOGUE.',
+    subtext: 'Textural echoes of the natural world. Precision-cut for the timeless silhouette.',
     position: 'center',
     rangeStart: 0.22,
     rangeEnd: 0.35,
   },
   {
     id: 'craft',
-    heading: 'TACTILE RESTRAINT.',
-    subtext: 'From organic linen to scorched amber. Values in every thread.',
+    heading: 'THE RARE EDIT.',
+    subtext: 'From scorched amber to raw linen. A sanctuary of uncompromising elegance.',
     position: 'center',
     rangeStart: 0.55,
     rangeEnd: 0.68,
   },
   {
     id: 'cta',
-    heading: 'Shop the collection.',
-    subtext: 'Scroll back to explore.',
+    heading: 'DRAPE STUDIO.',
+    subtext: 'Transcend the ordinary. Your silhouette, redefined through clinical precision.',
     position: 'center',
     rangeStart: 0.85,
     rangeEnd: 0.98,
@@ -143,7 +143,7 @@ export default function StoryOverlays({ scrollProgress }: StoryOverlaysProps) {
           ref={contentRef}
           className={`flex flex-col w-full h-full ${getPositionClasses(displayBeat.position)} transition-colors duration-700`}
         >
-          <h1 className="text-4xl sm:text-7xl lg:text-9xl tracking-tight leading-none mb-6 font-bebas px-4 transition-colors duration-1000 text-white drop-shadow-md">
+          <h1 className="text-3xl sm:text-7xl lg:text-9xl tracking-tight leading-none mb-6 font-bebas px-4 transition-colors duration-1000 text-white drop-shadow-md">
             {displayBeat.heading}
           </h1>
           <p className="text-[10px] sm:text-xs md:text-sm tracking-[0.3em] uppercase max-w-[260px] sm:max-w-none font-mono px-6 transition-colors duration-1000 text-white/80 drop-shadow-sm">

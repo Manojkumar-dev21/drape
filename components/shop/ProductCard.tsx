@@ -128,16 +128,12 @@ export default function ProductCard({ product, index }: ProductCardProps) {
             e.stopPropagation()
             handleAddToCart()
           }}
-          className="ios-liquid-btn w-full py-4 text-[10px] tracking-[0.25em] font-bold uppercase transition-all duration-300"
+          className="btn-minimal-amber w-full py-4 rounded-xl text-[11px] tracking-[0.2em] font-bold uppercase transition-all duration-300"
           style={{
             fontFamily: "var(--font-mono)",
-            background: '#D97706',
-            color: '#FDFCF0',
-            border: 'none',
-            boxShadow: '0 15px 30px rgba(217,119,6,0.15)',
           }}
         >
-          Quick Add
+          Add to Cart
         </button>
       </div>
     </div>

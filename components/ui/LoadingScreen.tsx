@@ -16,11 +16,8 @@ export default function LoadingScreen({ progress, onComplete }: LoadingScreenPro
 
   useEffect(() => {
     if (progress === 100) {
-      const timer = setTimeout(() => {
-        setIsExiting(true)
-        animateExit()
-      }, 500)
-      return () => clearTimeout(timer)
+      setIsExiting(true)
+      animateExit()
     }
   }, [progress])
 
@@ -29,7 +26,7 @@ export default function LoadingScreen({ progress, onComplete }: LoadingScreenPro
     if (textRef.current) {
       gsap.fromTo(textRef.current, 
         { opacity: 0, scale: 0.7, letterSpacing: '0.8em', y: 0 },
-        { opacity: 1, scale: 1, letterSpacing: '0.4em', y: 0, duration: 2.5, ease: "expo.out" }
+        { opacity: 1, scale: 1, letterSpacing: '0.4em', y: 0, duration: 1.0, ease: "expo.out" }
       )
     }
   }, [])
@@ -43,27 +40,27 @@ export default function LoadingScreen({ progress, onComplete }: LoadingScreenPro
     tl.to(textRef.current, {
       scale: 120, 
       opacity: 0,
-      filter: 'blur(50px)',
-      duration: 1.3,
+      filter: 'blur(30px)',
+      duration: 0.7,
       ease: "expo.in"
     })
 
     // Reveal main site EARLIER in the timeline
-    tl.add(() => onComplete(), "-=0.6")
+    tl.add(() => onComplete(), "-=0.3")
 
     // Zoom the entire screen slightly for immersive expansion
     tl.to(containerRef.current, {
       scale: 1.1,
       duration: 1.3,
       ease: "power2.inOut"
-    }, "-=1.3")
+    }, "-=0.7")
 
     // Reveal content through fading background
     tl.to(containerRef.current, {
       backgroundColor: 'transparent',
-      duration: 1.0,
+      duration: 0.6,
       ease: "power2.inOut"
-    }, "-=1.0")
+    }, "-=0.6")
 
     // Final fade out - faster
     tl.to(containerRef.current, {

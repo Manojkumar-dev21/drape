@@ -89,13 +89,63 @@ export default function ContactSection() {
     outline: 'none',
   }
 
+  const DoodleIcon = ({ name, className }: { name: string, className?: string }) => {
+    switch (name) {
+      case 'dress':
+        return (
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className={className}>
+            <path d="M12 4L16 6L18 20H6L8 6L12 4Z" />
+            <path d="M8 6C8 6 10 7 12 7C14 7 16 6 16 6" />
+          </svg>
+        )
+      case 'backpack':
+        return (
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className={className}>
+            <rect x="6" y="8" width="12" height="12" rx="2" />
+            <path d="M9 8V6C9 4.3 10.3 3 12 3C13.7 3 15 4.3 15 6V8" />
+            <path d="M6 12H18" />
+          </svg>
+        )
+      case 'sunglasses':
+        return (
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className={className}>
+            <circle cx="7" cy="12" r="3" />
+            <circle cx="17" cy="12" r="3" />
+            <path d="M10 12H14" />
+            <path d="M4 12L3 10" />
+            <path d="M20 12L21 10" />
+          </svg>
+        )
+      case 'hat':
+        return (
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className={className}>
+            <path d="M4 18H20" />
+            <path d="M6 18V12C6 8.7 8.7 6 12 6C15.3 6 18 8.7 18 12V18" />
+            <rect x="3" y="17" width="18" height="2" rx="1" />
+          </svg>
+        )
+      default: return null
+    }
+  }
+
   return (
     <section
       id="contact"
       ref={sectionRef}
-      className="relative w-full py-32 sm:py-48 px-6 sm:px-12 lg:px-24 overflow-hidden"
+      className="relative w-full py-24 sm:py-48 px-6 sm:px-12 lg:px-24 overflow-hidden"
       style={{ background: 'var(--cement)' }}
     >
+      {/* Doodle Background */}
+      <div className="absolute inset-0 pointer-events-none opacity-[0.03] overflow-hidden -z-0">
+        <div className="absolute top-[10%] left-[5%] rotate-12 animate-pulse"><DoodleIcon name="dress" className="w-32 h-32" /></div>
+        <div className="absolute top-[15%] right-[10%] -rotate-12"><DoodleIcon name="backpack" className="w-40 h-40" /></div>
+        <div className="absolute bottom-[20%] left-[15%] rotate-45 animate-pulse"><DoodleIcon name="sunglasses" className="w-24 h-24" /></div>
+        <div className="absolute bottom-[10%] right-[20%] -rotate-6"><DoodleIcon name="hat" className="w-36 h-36" /></div>
+
+        <div className="absolute top-[40%] left-[25%] -rotate-12 opacity-50"><DoodleIcon name="dress" className="w-16 h-16" /></div>
+        <div className="absolute top-[60%] right-[30%] rotate-3 opacity-50"><DoodleIcon name="backpack" className="w-20 h-20" /></div>
+        <div className="absolute top-[80%] left-[40%] -rotate-45 opacity-50"><DoodleIcon name="hat" className="w-14 h-14" /></div>
+      </div>
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 lg:gap-32">
 
